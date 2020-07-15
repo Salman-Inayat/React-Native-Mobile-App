@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Menu from './MenuComponent';
 import Constants from 'expo-constants';
 import Dishdetail from './DishdetailComponent';
+import Reservation from './ReservationComponent';
 import {View, Platform, Text, ScrollView, Image, StyleSheet } from 'react-native';
 import {createStackNavigator} from 'react-navigation-stack';
 import {createAppContainer, SafeAreaView} from 'react-navigation';
@@ -71,6 +72,26 @@ const MenuNavigator = createStackNavigator({
 
 const ContactUsNavigator = createStackNavigator({
   Contact: { screen: Contact },
+},
+{
+  defaultNavigationOptions: ({ navigation }) => ({
+    headerStyle: {
+        backgroundColor: "#512DA8"
+    },
+    headerTitleStyle: {
+        color: "#fff"            
+    },
+    headerTintColor: "#fff",
+    headerLeft: () => <Icon name='menu' size = {24} 
+      color = 'white'
+      onPress = { () => navigation.toggleDrawer()} 
+      />   
+  })
+}
+);
+
+const ReservationNavigator = createStackNavigator({
+  Reservation: { screen: Reservation },
 },
 {
   defaultNavigationOptions: ({ navigation }) => ({
@@ -185,6 +206,21 @@ const MainNavigator = createDrawerNavigator({
             />
           ),
         }
+      },
+    Reservation:
+      { screen: ReservationNavigator,
+        navigationOptions: {
+          title: ' Reserver Table',
+          drawerLabel: 'Reserver Table',
+          drawerIcon: ({ tintColor, focused }) => (
+            <Icon
+              name='cutlery'
+              type='font-awesome'            
+              size={24}
+              color={tintColor}
+            />
+          ),
+        }
       }
 }, {
   drawerBackgroundColor: '#D1C4E9',
@@ -194,13 +230,7 @@ const MainNavigator = createDrawerNavigator({
 const MainNavigatorContainer = createAppContainer(MainNavigator);
 
 class Main extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      dishes: DISHES,
-      selectedDish: null
-    };
-  }
+
 
   onDishSelect(dishId){
       this.setState({selectedDish : dishId})

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component , useRef} from "react";
 import { Card, Icon, Input } from "react-native-elements";
 import { connect } from "react-redux";
 import { baseUrl } from "../shared/baseUrl";
@@ -23,10 +23,18 @@ const mapDispatchToProps = dispatch => ({
 
 function RenderDish(props) {
   const dish = props.dish;
-  handleViewRef = ref => this.view = ref;
+  // handleViewRef = ref => this.view = ref;
+  const viewRef = useRef(null); 
 
   const recognizeDrag = ({ moveX, moveY, dx, dy }) => {
     if ( dx < -200 )
+        return true;
+    else
+        return false;
+  }
+
+  const recognizeComment = ({ moveX, moveY, dx, dy }) => {
+    if ( dx > 200 )
         return true;
     else
         return false;
@@ -37,7 +45,7 @@ function RenderDish(props) {
     onStartShouldSetPanResponder: (e, gestureState) => {
       return true;
     },
-    onPanResponderGrant: () => {this.view.rubberBand(1000)
+    onPanResponderGrant: () => {viewRef.current.rubberBand(1000)
       .then(endState => console.log(endState.finished ? 'finished' : 'cancelled'));},
     onPanResponderEnd: (e, gestureState) => {
       console.log("pan responder end", gestureState);
@@ -51,13 +59,16 @@ function RenderDish(props) {
           ],
           { cancelable: false }
         );
+      if(recognizeComment(gestureState)){
+        props.onPressAddComment();
+      }
       return true;
     }
   })
 
   if (dish != null) {
     return (
-      <Animatable.View animation="fadeInDown" duration={2000} delay={1000} ref={this.handleViewRef} {...panResponder.panHandlers}>
+      <Animatable.View animation="fadeInDown" duration={2000} delay={1000} ref={viewRef} {...panResponder.panHandlers}>
         <Card featuredTitle={dish.name} image={{ uri: baseUrl + dish.image }}>
           <Text style={{ margin: 10 }}>{dish.description}</Text>
           <View style={styles.icons}>

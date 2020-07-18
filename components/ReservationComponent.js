@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { Text, View, ScrollView, StyleSheet, Picker, Modal,Switch, Button, Alert } from 'react-native';
-// import DateTimePicker from '@react-native-community/datetimepicker';
+// import DaaeTimePicker from '@react-native-community/datetimepicker';
 import DatePicker from 'react-native-datepicker';
 import * as Animatable from 'react-native-animatable';
+import * as Permissions from 'expo-permissions';
+import { Notifications } from 'expo';
 
 class Reservation extends Component {
 
@@ -15,6 +17,33 @@ class Reservation extends Component {
             date: new Date(),
             showModal: false
         }
+    }
+
+    obtainNotificationPermission = async() => {
+        let permission = await Permissions.getAsync(Permissions.USER_FACING_NOTIFICATIONS)
+        if(permission.status !== 'granted'){
+          permission = await Permissions.askAsync(Permissions.USER_FACING_NOTIFICATIONS)
+          if(permission.status !== 'granted'){
+            Alert.alert('Permission not granted to show notifications')
+          }
+        }
+        return permission
+      }
+    
+    presentLocalNotification = async(date) => {
+    await this.obtainNotificationPermission()
+    Notifications.presentLocalNotificationAsync({
+        title: 'Your Reservation',
+        body: `Reservation for ${date} requested`,
+        ios: {
+            sound: true
+        },
+            android: {
+            sound: true,
+            vibrate: true,     //REVIEW: does not work
+            color: '#512DA8'   //REVIEW: does not work
+            },
+        })
     }
 
     static navigationOptions = {
@@ -33,11 +62,17 @@ class Reservation extends Component {
             // 'Date of the time:'+this.state.date,
             [
             {text: 'Cancel', onPress: () => this.resetForm(), style: 'cancel'},
-            {text: 'OK', onPress: () => this.resetForm(), style: 'cancel'},
-            ],
+            {text: 'OK', onPress: () => {
+                this.resetForm(), 
+                this.presentLocalNotification(this.state.date)
+                },style: 'cancel'
+            },
+        ],
             { cancelable: false }
         );
     }
+
+
 
     resetForm() {
         this.setState({
@@ -121,6 +156,7 @@ class Reservation extends Component {
                             
                             <Button 
                                 onPress = {() =>{this.toggleModal(); this.resetForm();}}
+                                
                                 color="#512DA8"
                                 title="Close" 
                                 />

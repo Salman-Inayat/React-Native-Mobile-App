@@ -5,7 +5,7 @@ import { baseUrl } from "../shared/baseUrl";
 import { postFavorite, postComment } from "../redux/ActionCreators";
 import { Rating } from "react-native-elements";
 import * as Animatable from 'react-native-animatable';
-import { Text, View, ScrollView, FlatList, Modal, StyleSheet, Button, Alert, PanResponder } from 'react-native';
+import { Text, View, ScrollView, FlatList, Modal, StyleSheet, Button, Alert, PanResponder, Share} from 'react-native';
 
 const mapStateToProps = state => {
   return {
@@ -66,6 +66,16 @@ function RenderDish(props) {
     }
   })
 
+  const shareDish = (title, message, url) => {
+    Share.share({
+        title: title,
+        message: title + ': ' + message + ' ' + url,
+        url: url
+    },{
+        dialogTitle: 'Share ' + title
+    })
+}
+
   if (dish != null) {
     return (
       <Animatable.View animation="fadeInDown" duration={2000} delay={1000} ref={viewRef} {...panResponder.panHandlers}>
@@ -87,6 +97,14 @@ function RenderDish(props) {
               type="font-awesome"
               color="#512DA8"
               onPress={props.onPressAddComment}
+            />
+            <Icon
+              raised
+              reverse
+              name="share"
+              type="font-awesome"
+              color="#51D2A8"
+              onPress={() => shareDish(dish.name, dish.description, baseUrl + dish.image)}
             />
           </View>
         </Card>

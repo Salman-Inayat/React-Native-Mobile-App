@@ -6,7 +6,7 @@ import { baseUrl } from '../shared/baseUrl';
 import * as SecureStore from 'expo-secure-store';
 import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
-// import * as ImageManipulator from 'expo-image-manipulator';
+import * as ImageManipulator from 'expo-image-manipulator';
 class LoginTab extends Component {
 
     constructor(props) {
@@ -145,7 +145,7 @@ class RegisterTab extends Component {
             });
             if (!capturedImage.cancelled) {
                 console.log(capturedImage);
-                // this.processImage(capturedImage.uri);
+                this.processImage(capturedImage.uri);
             }
         }
     }
@@ -153,30 +153,30 @@ class RegisterTab extends Component {
     getImageFromGallery = async () => {
         const cameraRollPermission = await Permissions.askAsync(Permissions.CAMERA_ROLL);
         if (cameraRollPermission.status === 'granted') {
-            let pickImage = await ImagePicker.launchImageLibraryAsync({
+            let pickedImage = await ImagePicker.launchImageLibraryAsync({
                 allowsEditing: true,
                 aspect: [4, 3],
+                mediaTypes: ImagePicker.MediaTypeOptions.Images
             });
-            if (!pickImage.cancelled) {
-                console.log(pickImage);
-                // this.processImage(capturedImage.uri);
+            if (!pickedImage.cancelled) {
+                console.log(pickedImage);
+                this.processImage(pickedImage.uri);
             }
         }
     }
 
+    processImage = async (imageUri) => {
+        let processedImage = await ImageManipulator.manipulateAsync(
+            imageUri, 
+            [
+                {resize: {width: 400}}
+            ],
+            {format: 'png'}
+        );
+        console.log(processedImage);
+        this.setState({imageUrl: processedImage.uri });
 
-    // processImage = async (imageUri) => {
-    //     let processedImage = await ImageManipulator.manipulateAsync(
-    //         imageUri, 
-    //         [
-    //             {resize: {width: 400}}
-    //         ],
-    //         {format: 'png'}
-    //     );
-    //     console.log(processedImage);
-    //     this.setState({imageUrl: processedImage.uri });
-
-    // }
+    }
     
     static navigationOptions = {
         title: 'Register',

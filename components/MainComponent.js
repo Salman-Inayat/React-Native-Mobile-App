@@ -277,7 +277,7 @@ const MainNavigator = createDrawerNavigator({
   Reservation:
   { screen: ReservationNavigator,
     navigationOptions: {
-      title: ' Reserver Table',
+      title: ' Reserve Table',
       drawerLabel: 'Reserver Table',
       drawerIcon: ({ tintColor, focused }) => (
         <Icon

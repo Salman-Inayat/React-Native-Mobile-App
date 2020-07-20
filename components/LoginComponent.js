@@ -3,9 +3,10 @@ import { View, StyleSheet, Text, ScrollView, Image } from 'react-native';
 import { Input, CheckBox, Button, Icon } from 'react-native-elements';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { baseUrl } from '../shared/baseUrl';
-import * as SecureStore from 'expo-secure-store'
-import * as Permissions from 'expo-permissions'
-import * as ImagePicker from 'expo-image-picker'
+import * as SecureStore from 'expo-secure-store';
+import * as Permissions from 'expo-permissions';
+import * as ImagePicker from 'expo-image-picker';
+// import * as ImageManipulator from 'expo-image-manipulator';
 class LoginTab extends Component {
 
     constructor(props) {
@@ -144,11 +145,25 @@ class RegisterTab extends Component {
             });
             if (!capturedImage.cancelled) {
                 console.log(capturedImage);
-                this.setState({imageUrl: capturedImage.uri });
+                // this.processImage(capturedImage.uri);
             }
         }
 
     }
+
+
+    // processImage = async (imageUri) => {
+    //     let processedImage = await ImageManipulator.manipulateAsync(
+    //         imageUri, 
+    //         [
+    //             {resize: {width: 400}}
+    //         ],
+    //         {format: 'png'}
+    //     );
+    //     console.log(processedImage);
+    //     this.setState({imageUrl: processedImage.uri });
+
+    // }
     
     static navigationOptions = {
         title: 'Register',
@@ -179,10 +194,13 @@ class RegisterTab extends Component {
                         loadingIndicatorSource={require('./images/logo.png')}
                         style={styles.image} 
                         />
-                    <Button
-                        title="Camera"
-                        onPress={this.getImageFromCamera}
+                    <View style={styles.cameraButton}>
+                        <Button 
+                            title="Camera"
+                            onPress={this.getImageFromCamera}
                         />
+                    </View>
+                    
                 </View>
                 <Input
                     placeholder="Username"
@@ -264,14 +282,17 @@ const styles = StyleSheet.create({
       height: 60
     },
     formInput: {
-        margin: 20
+        margin: 5
     },
     formCheckbox: {
         margin: 20,
         backgroundColor: null
     },
     formButton: {
-        margin: 60
+        margin: 20
+    },
+    cameraButton:{
+        margin: 25
     }
 });
 

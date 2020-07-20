@@ -5,6 +5,7 @@ import DatePicker from 'react-native-datepicker';
 import * as Animatable from 'react-native-animatable';
 import * as Permissions from 'expo-permissions';
 import { Notifications } from 'expo';
+import * as Calendar from 'expo-calendar';
 
 class Reservation extends Component {
 
@@ -18,6 +19,11 @@ class Reservation extends Component {
             showModal: false
         }
     }
+
+    // addReservationToCalendar(date){
+
+    // }
+    
 
     obtainNotificationPermission = async() => {
         let permission = await Permissions.getAsync(Permissions.USER_FACING_NOTIFICATIONS)
@@ -47,7 +53,7 @@ class Reservation extends Component {
     }
 
     static navigationOptions = {
-        title: 'Reserve Table',
+        title: 'Reserve Table'
     };
 
     toggleModal() {
@@ -70,9 +76,46 @@ class Reservation extends Component {
         ],
             { cancelable: false }
         );
+        this.addReservationToCalendar(this.state.date);
     }
 
+    obtainCalendarPermission = async() => {
+        let permission = await Permissions.getAsync(Permissions.CALENDAR)
+        if(permission.status !== 'granted'){
+          permission = await Permissions.askAsync(Permissions.CALENDAR)
+          if(permission.status !== 'granted'){
+            Alert.alert('Permission not granted to access Calendar')
+          }
+        }
+        return permission;
+      }
 
+    getCalendarId = async() => {
+    
+        await Calendar.getCalendarsAsync()
+        .then( (calArray)=>{ id = calArray.find( (val)=>{return val.title==='My calendar'} ) } )
+        .catch( (error)=>{console.log('could not get calendar object, : '+error.message)} )
+        id = id.id
+        console.log('Id :'+id)
+        return id
+    }      
+
+    addReservationToCalendar = async(date) => {
+        await this.obtainCalendarPermission()
+        id = await this.getCalendarId()
+        
+        var details = {}
+        details.title = 'Con Fusion Table Reservation'
+        details.timeZone = 'Asia/Hong_Kong'
+        details.location = '121, Clear Water Bay Road, Clear Water Bay, Kowloon, Hong Kong'
+        details.startDate = new Date(Date.parse(date))
+        details.endDate = new Date(Date.parse(date)+2*60*60*1000)
+        console.log('details: '+JSON.stringify(details))
+    
+        Calendar.createEventAsync(id, details)
+        .then( ()=>{console.log("Event created")} )
+        .catch( (error)=>{console.log("Event not saved: "+error.message)} )
+      }
 
     resetForm() {
         this.setState({
@@ -112,28 +155,29 @@ class Reservation extends Component {
                     </View>
                     <View style={styles.formRow}>
                     <Text style={styles.formLabel}>Date and Time</Text>
-                    <DatePicker
+                    <DatePicker 
+                        //iso format = YYYY-MM-DDTHH:mm:ss.sssZ
                         style={{flex: 2, marginRight: 20}}
                         date={this.state.date}
-                        format=''
-                        mode="datetime"
-                        placeholder="select date and Time"
-                        minDate="2017-01-01"
-                        confirmBtnText="Confirm"
-                        cancelBtnText="Cancel"
+                        format='YYYY-MM-DDTHH:mmZ'
+                        mode='datetime'
+                        placeholder='select date and time'
+                        minDate='2020-7-15'
+                        maxDate='2020-7-30'
+                        confirmBtnText='Confirm'
+                        cancelBtnText='Cancel'
                         customStyles={{
-                        dateIcon: {
+                            dateIcon: {
                             position: 'absolute',
                             left: 0,
                             top: 4,
                             marginLeft: 0
-                        },
-                        dateInput: {
+                            },
+                            dateInput: {
                             marginLeft: 36
-                        }
-                        // ... You can check the source to find the other keys. 
+                            }
                         }}
-                        onDateChange={(date) => {this.setState({date: date})}}
+                        onDateChange={ (date)=>{this.setState({date: date})} }
                     />
                     </View>
                     <View style={styles.formRow}>

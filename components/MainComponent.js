@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Menu from './MenuComponent';
 import Dishdetail from './DishdetailComponent';
 import Reservation from './ReservationComponent';
-import {View, Platform, Text, ScrollView, Image, StyleSheet, ToastAndroid } from 'react-native';
+import {View, Text, ScrollView, Image, StyleSheet, ToastAndroid } from 'react-native';
 import {createStackNavigator} from 'react-navigation-stack';
 import {createAppContainer, SafeAreaView} from 'react-navigation';
 import Home from './HomeComponent';
@@ -290,18 +290,18 @@ const MainNavigator = createDrawerNavigator({
     }
   }
 }, {
-  initialRouteName: 'AboutUs',
+  initialRouteName: 'Home',
   drawerBackgroundColor: '#D1C4E9',
   contentComponent: CustomDrawerContentComponent
 });
 
 const MainNavigatorContainer = createAppContainer(MainNavigator);
-
 class Main extends Component {
 
   onDishSelect(dishId){
       this.setState({selectedDish : dishId})
   }
+
 
   componentDidMount() {
     console.log("app started");
@@ -309,7 +309,6 @@ class Main extends Component {
     this.props.fetchComments();
     this.props.fetchPromos();
     this.props.fetchLeaders();
-
 
     // NetInfo.fetch().then(connectionInfo => {
     //   ToastAndroid.show(
@@ -350,12 +349,11 @@ class Main extends Component {
   //   }
   // };
 
-
   render() {
  
     return (
-        <View >
-            <MainNavigatorContainer/>
+        <View style={{ flex: 1, paddingTop: Platform.OS === 'ios' ? 0 : 0}}>
+            <MainNavigatorContainer/> 
         </View>
     );
   }

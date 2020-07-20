@@ -78,7 +78,7 @@ function RenderDish(props) {
 
   if (dish != null) {
     return (
-      <Animatable.View animation="fadeInDown" duration={2000} delay={1000} ref={viewRef} {...panResponder.panHandlers}>
+      <Animatable.View animation="fadeInDown" duration={1000} delay={1000} ref={viewRef} {...panResponder.panHandlers}>
         <Card featuredTitle={dish.name} image={{ uri: baseUrl + dish.image }}>
           <Text style={{ margin: 10 }}>{dish.description}</Text>
           <View style={styles.icons}>

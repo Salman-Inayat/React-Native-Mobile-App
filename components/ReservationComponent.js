@@ -162,8 +162,8 @@ class Reservation extends Component {
                         format='YYYY-MM-DDTHH:mmZ'
                         mode='datetime'
                         placeholder='select date and time'
-                        minDate='2020-7-15'
-                        maxDate='2020-7-30'
+                        // minDate='2020-7-15'
+                        // maxDate='2020-7-30'
                         confirmBtnText='Confirm'
                         cancelBtnText='Cancel'
                         customStyles={{

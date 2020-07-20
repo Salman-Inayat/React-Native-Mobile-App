@@ -16,7 +16,7 @@ function Contact(){
     }
 
     return(
-        <Animatable.View animation="fadeInDown" duration={2000} delay={1000}>                
+        // <Animatable.View animation="fadeInDown" duration={1000} delay={1000}>                
             <Card title='Contact Information'>
                 <Text>121, Clear Water Bay Road</Text>
                 <Text>Clear Water Bay, Kowloon</Text>
@@ -31,7 +31,7 @@ function Contact(){
                     onPress={this.sendMail}
                 />
             </Card>
-        </Animatable.View>
+        // </Animatable.View>
     );
 }
 

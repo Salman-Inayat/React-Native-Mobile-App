@@ -82,7 +82,7 @@ class LoginTab extends Component {
                         onPress={() => this.handleLogin()}
                         title="Login"
                         icon={
-                            <Icon
+                            <Icon style={{margin: 5}}
                                 name='sign-in'
                                 type='font-awesome'            
                                 size={24}
@@ -100,7 +100,7 @@ class LoginTab extends Component {
                         title="Register"
                         clear
                         icon={
-                            <Icon
+                            <Icon style={{margin: 5}}
                                 name='user-plus'
                                 type='font-awesome'            
                                 size={24}
@@ -267,7 +267,7 @@ class RegisterTab extends Component {
                         onPress={() => this.handleRegister()}
                         title="Register"
                         icon={
-                            <Icon
+                            <Icon style={{margin: 5}}
                                 name='user-plus'
                                 type='font-awesome'            
                                 size={24}
